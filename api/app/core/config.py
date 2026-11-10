@@ -8,7 +8,8 @@ from qdrant_client import QdrantClient
 
 
 # api/.env
-ENV_FILE = Path(__file__).resolve().parents[2] / ".env"
+API_DIR = Path(__file__).resolve().parents[2]
+ENV_FILE = API_DIR / ".env"
 
 
 class Settings(BaseSettings):
@@ -66,4 +67,7 @@ def get_embeddings(settings: Settings) -> Embeddings:
 def get_qdrant_client(settings: Settings) -> QdrantClient:
     if settings.qdrant_url:
         return QdrantClient(url=settings.qdrant_url)
-    return QdrantClient(path=settings.qdrant_path)
+    path = Path(settings.qdrant_path)
+    if not path.is_absolute():
+        path = API_DIR / path
+    return QdrantClient(path=str(path))

@@ -7,7 +7,7 @@ from langchain_qdrant import QdrantVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from qdrant_client.models import Distance, VectorParams
 
-from core.config import get_embeddings, get_qdrant_client, get_settings
+from app.core.config import API_DIR, get_embeddings, get_qdrant_client, get_settings
 
 
 def load(path: Path) -> list[Document]:
@@ -19,6 +19,8 @@ def ingest(path: str | None = None) -> int:
 
     # 1. Load
     file = Path(path or settings.data_path)
+    if not file.is_absolute():
+        file = API_DIR / file
     documents = load(file)
 
     # 2. Chunk
