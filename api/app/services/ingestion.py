@@ -67,3 +67,10 @@ def ingest(path: str | None = None) -> int:
         client.close()
 
     return len(chunks)
+
+
+if __name__ == "__main__":
+    import sys
+
+    count = ingest(sys.argv[1] if len(sys.argv) > 1 else None)
+    print(f"Ingested {count} chunks into Qdrant")
